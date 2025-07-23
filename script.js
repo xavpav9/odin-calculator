@@ -22,15 +22,23 @@ calculator.addEventListener("click", evt => {
       displayText.textContent = "0";
       if (evt.target.textContent === "AC") return;
     };
-    if (evt.target.textContent === "CE") {
+    if (evt.target.textContent === "CE" || evt.target.textContent === "DEL") {
       if (operatorJustReady && operator !== "=") { // don't clear screen, only remove operator
         operatorReady = false;
         operator = "";
         operatorJustReady = false;
         return;
       }
-      decimalUsed = false;
-      displayText.textContent = "0";
+      
+      if (evt.target.textContent === "DEL") {
+        let newText = displayText.textContent.slice(0, -1);
+        if (!newText.includes(".")) decimalUsed = false;
+        if (newText === "") newText += "0";
+        displayText.textContent = newText;
+      } else {
+        decimalUsed = false;
+        displayText.textContent = "0";
+      };
       if (operatorReady) operatorJustReady = true; // for preventing early equals pressing
 
     } else {
