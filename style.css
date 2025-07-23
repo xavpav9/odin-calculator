@@ -1,0 +1,35 @@
+.calculator {
+  margin: 0px auto;
+  background-color: grey;
+  padding: 20px 15px;
+  width: 230px;
+  border-radius: 20px;
+  border: 2px solid black;
+}
+
+.calculator button {
+  width: 50px;
+  height: 50px;
+  flex: 0 0 auto;
+}
+
+.calculator button:hover {
+  background-color: #dddddd;
+}
+
+.calculator button, .calculator .display {
+  border-radius: 2px;
+  border: thin solid black;
+}
+
+.row {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+  justify-content: center;
+}
+
+.calculator .display {
+  height: 100px;
+  background-color: #f0f0f0;
+  
