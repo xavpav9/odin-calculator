@@ -1,3 +1,4 @@
+const ZERO_MESSAGE = "Impossible!";
 const calculator = document.querySelector(".calculator");
 const displayText = document.querySelector(".display .text");
 
@@ -10,13 +11,15 @@ let operator;
 
 calculator.addEventListener("click", evt => {
   if (evt.target.tagName === "BUTTON") {
-    if (evt.target.textContent === "AC") {
+    if (evt.target.textContent === "AC" || displayText.textContent === ZERO_MESSAGE) {
       leftOperand = "";
       operator = "";
       operatorReady = false;
       operatorJustReady = false;
       displayText.textContent = "";
-    } else if (evt.target.textContent === "CE") {
+      if (evt.target.textContent === "AC") return;
+    };
+    if (evt.target.textContent === "CE") {
       if (operatorJustReady && operator !== "=") { // don't clear screen, only remove operator
         operatorReady = false;
         operatorJustReady = false;
@@ -41,15 +44,19 @@ calculator.addEventListener("click", evt => {
         operatorJustReady = true;
 
       } else if ((evt.target.textContent === "=" || operators.includes(evt.target.textContent)) && operatorReady && !operatorJustReady && displayText.textContent !== "") {
-        leftOperand = Math.round(operate(leftOperand, operator, +displayText.textContent) * 100) / 100;
-        displayText.textContent = leftOperand;
-        if (evt.target.textContent === "=") operatorReady = false;
-        else operator = evt.target.textContent;
-        operatorJustReady = true; 
-        operator = "="; // for CE
-      }
-    }
-  }
+        if (+displayText.textContent === 0 && operator === "÷") {
+          displayText.textContent = ZERO_MESSAGE;
+        } else {
+          leftOperand = Math.round(operate(leftOperand, operator, +displayText.textContent) * 100) / 100;
+          displayText.textContent = leftOperand;
+          if (evt.target.textContent === "=") operatorReady = false;
+          else operator = evt.target.textContent;
+          operatorJustReady = true; 
+          operator = "="; // for CE
+        };
+      };
+    };
+  };
 });
 
 function add(num1, num2) {return num1 + num2};
