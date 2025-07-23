@@ -30,6 +30,14 @@
 }
 
 .calculator .display {
+  display: flex;
+  align-items: center;
+  justify-content: end;
+
   height: 100px;
   background-color: #f0f0f0;
-  
+}
+
+.calculator .display .text {
+  font-size: 50px;
+}
