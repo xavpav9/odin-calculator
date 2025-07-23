@@ -2,10 +2,12 @@ const ZERO_MESSAGE = "Impossible!";
 const calculator = document.querySelector(".calculator");
 const displayText = document.querySelector(".display .text");
 
+displayText.textContent = "0";
 const numbers = "0 1 2 3 4 5 6 7 8 9".split(" ");
 const operators = "+ - x ÷".split(" ");
 let operatorReady = false;
 let operatorJustReady = false;
+let decimalUsed = false;
 let leftOperand;
 let operator;
 
@@ -16,6 +18,7 @@ calculator.addEventListener("click", evt => {
       operator = "";
       operatorReady = false;
       operatorJustReady = false;
+      decimalUsed = false;
       displayText.textContent = "0";
       if (evt.target.textContent === "AC") return;
     };
@@ -26,17 +29,23 @@ calculator.addEventListener("click", evt => {
         operatorJustReady = false;
         return;
       }
+      decimalUsed = false;
       displayText.textContent = "0";
       if (operatorReady) operatorJustReady = true; // for preventing early equals pressing
 
     } else {
       if (numbers.includes(evt.target.textContent)) {
-        if (+displayText.textContent === 0) displayText.textContent = "";
+        if (displayText.textContent === "0") displayText.textContent = "";
         if (operatorJustReady) {
           displayText.textContent = "";
           operatorJustReady = false;
         }
         displayText.textContent += evt.target.textContent; 
+      };
+      
+      if (evt.target.textContent === "." && !decimalUsed) {
+        displayText.textContent += evt.target.textContent;
+        decimalUsed = true;
       };
 
       if (operators.includes(evt.target.textContent) && !operatorReady) {
@@ -56,6 +65,9 @@ calculator.addEventListener("click", evt => {
             operator = "="; // for CE
           } else operator = evt.target.textContent; // for chained operations
           operatorJustReady = true; 
+          if (!displayText.textContent.includes(".")) {
+            decimalUsed = false;
+          };
         };
       };
     };
