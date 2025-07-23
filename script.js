@@ -22,6 +22,7 @@ calculator.addEventListener("click", evt => {
     if (evt.target.textContent === "CE") {
       if (operatorJustReady && operator !== "=") { // don't clear screen, only remove operator
         operatorReady = false;
+        operator = "";
         operatorJustReady = false;
         return;
       }
@@ -50,10 +51,11 @@ calculator.addEventListener("click", evt => {
         } else {
           leftOperand = Math.round(operate(leftOperand, operator, +displayText.textContent) * 100) / 100;
           displayText.textContent = leftOperand;
-          if (evt.target.textContent === "=") operatorReady = false;
-          else operator = evt.target.textContent;
+          if (evt.target.textContent === "=") {
+            operatorReady = false;
+            operator = "="; // for CE
+          } else operator = evt.target.textContent; // for chained operations
           operatorJustReady = true; 
-          operator = "="; // for CE
         };
       };
     };
