@@ -23,7 +23,7 @@ calculator.addEventListener("click", evt => {
       operator = evt.target.textContent;
       operatorReady = true;
       operatorJustReady = true;
-    } else if ((evt.target.textContent === "=" || operators.includes(evt.target.textContent)) && operatorReady && displayText.textContent !== "") {
+    } else if ((evt.target.textContent === "=" || operators.includes(evt.target.textContent)) && operatorReady && !operatorJustReady && displayText.textContent !== "") {
       leftOperand = Math.round(operate(leftOperand, operator, +displayText.textContent) * 100) / 100;
       displayText.textContent = leftOperand;
       if (evt.target.textContent === "=") operatorReady = false;
