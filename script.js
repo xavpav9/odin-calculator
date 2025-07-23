@@ -16,7 +16,7 @@ calculator.addEventListener("click", evt => {
       operator = "";
       operatorReady = false;
       operatorJustReady = false;
-      displayText.textContent = "";
+      displayText.textContent = "0";
       if (evt.target.textContent === "AC") return;
     };
     if (evt.target.textContent === "CE") {
@@ -25,11 +25,12 @@ calculator.addEventListener("click", evt => {
         operatorJustReady = false;
         return;
       }
-      displayText.textContent = "";
+      displayText.textContent = "0";
       if (operatorReady) operatorJustReady = true; // for preventing early equals pressing
 
     } else {
       if (numbers.includes(evt.target.textContent)) {
+        if (+displayText.textContent === 0) displayText.textContent = "";
         if (operatorJustReady) {
           displayText.textContent = "";
           operatorJustReady = false;
