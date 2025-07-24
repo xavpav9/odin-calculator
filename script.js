@@ -1,6 +1,6 @@
 const ZERO_MESSAGE = "Error";
 const TOO_LONG = "Too Long";
-const MAX_LENGTH = 8;
+const MAX_LENGTH = 7;
 const calculator = document.querySelector(".calculator");
 const displayText = document.querySelector(".display .text");
 const displayOperator = document.querySelector(".display .operator");
@@ -59,7 +59,11 @@ calculator.addEventListener("click", evt => {
           displayText.textContent = "";
           operatorJustReady = false;
         }
-        if (!(String(displayText.textContent).length >= 8)) displayText.textContent += evt.target.textContent; 
+        if (String(displayText.textContent).length < MAX_LENGTH) displayText.textContent += evt.target.textContent; 
+        else if (String(displayText.textContent).includes("-")) {
+          if (String(displayText.textContent).split("-")[1].length < MAX_LENGTH) displayText.textContent += evt.target.textContent; 
+        };
+          
         if (operator === "=") displayOperator.textContent = "";
       };
       
@@ -71,6 +75,12 @@ calculator.addEventListener("click", evt => {
         if (operatorJustReady) operatorJustReady = false;
         displayText.textContent += evt.target.textContent;
         decimalUsed = true;
+      };
+      
+      if (evt.target.textContent === "+/-") {
+        if (operator === "=") displayOperator.textContent = "";
+        let newText = -+displayText.textContent; 
+        displayText.textContent = newText;
       };
 
       if (operators.includes(evt.target.textContent) && !operatorReady) {
@@ -85,6 +95,11 @@ calculator.addEventListener("click", evt => {
           displayText.textContent = ZERO_MESSAGE;
         } else {
           leftOperand = operate(leftOperand, operator, +displayText.textContent);
+          let negative = false;
+          if (leftOperand < 0) {
+            leftOperand *= -1;
+            negative = true;
+          };
 
           if (String(leftOperand).split(".")[0].length > MAX_LENGTH) leftOperand = TOO_LONG;
           else {
@@ -96,7 +111,7 @@ calculator.addEventListener("click", evt => {
             };
           };
 
-          displayText.textContent = leftOperand;
+          displayText.textContent = ((negative) ? "-" : "") + leftOperand;
 
           if (evt.target.textContent === "=") {
             operatorReady = false;
