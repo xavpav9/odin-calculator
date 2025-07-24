@@ -1,4 +1,5 @@
-const ZERO_MESSAGE = "Impossible!";
+const ZERO_MESSAGE = "Error";
+const TOO_LONG = "Too Long";
 const calculator = document.querySelector(".calculator");
 const displayText = document.querySelector(".display .text");
 const displayOperator = document.querySelector(".display .operator");
@@ -15,7 +16,7 @@ let operator;
 
 calculator.addEventListener("click", evt => {
   if (evt.target.tagName === "BUTTON") {
-    if (evt.target.textContent === "AC" || displayText.textContent === ZERO_MESSAGE) {
+    if (evt.target.textContent === "AC" || displayText.textContent === ZERO_MESSAGE || displayText.textContent === TOO_LONG) {
       leftOperand = "";
       operator = "";
       operatorReady = false;
@@ -25,6 +26,7 @@ calculator.addEventListener("click", evt => {
       displayOperator.textContent = "";
       if (evt.target.textContent === "AC") return;
     };
+
     if (evt.target.textContent === "CE" || evt.target.textContent === "DEL") {
       if (operatorJustReady && operator !== "=") { // don't clear screen, only remove operator
         operatorReady = false;
@@ -39,6 +41,7 @@ calculator.addEventListener("click", evt => {
           newText += "0";
           displayOperator.textContent = "";
         };
+        if (operator === "=") displayOperator.textContent = "";
         displayText.textContent = newText;
       } else {
         decimalUsed = false;
@@ -55,8 +58,8 @@ calculator.addEventListener("click", evt => {
           displayText.textContent = "";
           operatorJustReady = false;
         }
+        if (!(String(displayText.textContent).length >= 8)) displayText.textContent += evt.target.textContent; 
         if (operator === "=") displayOperator.textContent = "";
-        displayText.textContent += evt.target.textContent; 
       };
       
       if (evt.target.textContent === "." && !decimalUsed) {
@@ -76,6 +79,7 @@ calculator.addEventListener("click", evt => {
           displayText.textContent = ZERO_MESSAGE;
         } else {
           leftOperand = Math.round(operate(leftOperand, operator, +displayText.textContent) * 100) / 100;
+          if (String(leftOperand).length >= 8) leftOperand = TOO_LONG;
           displayText.textContent = leftOperand;
           if (evt.target.textContent === "=") {
             operatorReady = false;
