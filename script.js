@@ -150,8 +150,10 @@ const numberToClass = {
 }
 
 window.addEventListener("keydown", evt => {
-  const keyClass = numberToClass[evt.key];
-  if (keyClass !== undefined) document.querySelector(keyClass).dispatchEvent(new Event("click", {bubbles: true}));
+  if (!evt.ctrlKey && !evt.altKey && !evt.metaKey) { // not shift because it is needed to press + and *
+    const keyClass = numberToClass[evt.key];
+    if (keyClass !== undefined) document.querySelector(keyClass).dispatchEvent(new Event("click", {bubbles: true}));
+  };
 });
 
 function add(num1, num2) {return num1 + num2};
