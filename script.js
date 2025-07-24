@@ -1,5 +1,6 @@
 const ZERO_MESSAGE = "Error";
 const TOO_LONG = "Too Long";
+const MAX_LENGTH = 8;
 const calculator = document.querySelector(".calculator");
 const displayText = document.querySelector(".display .text");
 const displayOperator = document.querySelector(".display .operator");
@@ -83,9 +84,20 @@ calculator.addEventListener("click", evt => {
         if (+displayText.textContent === 0 && operator === "÷") {
           displayText.textContent = ZERO_MESSAGE;
         } else {
-          leftOperand = Math.round(operate(leftOperand, operator, +displayText.textContent) * 100) / 100;
-          if (String(leftOperand).length >= 8) leftOperand = TOO_LONG;
+          leftOperand = operate(leftOperand, operator, +displayText.textContent);
+
+          if (String(leftOperand).split(".")[0].length > MAX_LENGTH) leftOperand = TOO_LONG;
+          else {
+            if (String(leftOperand)[8] === ".") {
+              leftOperand = Math.round(leftOperand);
+            } else if (String(leftOperand).slice(0, 8).includes(".")) {
+              const right = String(leftOperand).slice(0, 8).split(".")[1].length;
+              leftOperand = Math.round(leftOperand * (10 ** (right))) / (10 ** (right));
+            };
+          };
+
           displayText.textContent = leftOperand;
+
           if (evt.target.textContent === "=") {
             operatorReady = false;
             operator = "="; // for CE
