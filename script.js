@@ -1,6 +1,7 @@
 const ZERO_MESSAGE = "Impossible!";
 const calculator = document.querySelector(".calculator");
 const displayText = document.querySelector(".display .text");
+const display = document.querySelector(".display");
 
 displayText.textContent = "0";
 const numbers = "0 1 2 3 4 5 6 7 8 9".split(" ");
@@ -80,6 +81,34 @@ calculator.addEventListener("click", evt => {
       };
     };
   };
+});
+
+const numberToClass = {
+  "0": ".zero",
+  "1": ".one",
+  "2": ".two",
+  "3": ".three",
+  "4": ".four",
+  "5": ".five",
+  "6": ".six",
+  "7": ".seven",
+  "8": ".eight",
+  "9": ".nine",
+  "+": ".plus",
+  "-": ".subtract",
+  "÷": ".divide",
+  "/": ".divide",
+  "x": ".times",
+  "*": ".times",
+  "=": ".equals",
+  "Enter": ".equals",
+  "Backspace": ".delete",
+  ".": ".decimal-point",
+}
+
+window.addEventListener("keydown", evt => {
+  const keyClass = numberToClass[evt.key];
+  if (keyClass !== undefined) document.querySelector(keyClass).dispatchEvent(new Event("click", {bubbles: true}));
 });
 
 function add(num1, num2) {return num1 + num2};
