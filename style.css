@@ -32,12 +32,18 @@
 .calculator .display {
   display: flex;
   align-items: center;
-  justify-content: end;
+  justify-content: space-between;
 
   height: 100px;
   background-color: #f0f0f0;
+  padding: 10px;
 }
 
 .calculator .display .text {
   font-size: 50px;
+}
+
+.calculator .display .operator {
+  font-size: 20px;
+  font-weight; 700;
 }

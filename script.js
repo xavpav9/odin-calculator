@@ -1,6 +1,7 @@
 const ZERO_MESSAGE = "Impossible!";
 const calculator = document.querySelector(".calculator");
 const displayText = document.querySelector(".display .text");
+const displayOperator = document.querySelector(".display .operator");
 const display = document.querySelector(".display");
 
 displayText.textContent = "0";
@@ -21,6 +22,7 @@ calculator.addEventListener("click", evt => {
       operatorJustReady = false;
       decimalUsed = false;
       displayText.textContent = "0";
+      displayOperator.textContent = "";
       if (evt.target.textContent === "AC") return;
     };
     if (evt.target.textContent === "CE" || evt.target.textContent === "DEL") {
@@ -30,16 +32,20 @@ calculator.addEventListener("click", evt => {
         operatorJustReady = false;
         return;
       }
-      
       if (evt.target.textContent === "DEL") {
         let newText = displayText.textContent.slice(0, -1);
         if (!newText.includes(".")) decimalUsed = false;
-        if (newText === "") newText += "0";
+        if (newText === "") {
+          newText += "0";
+          displayOperator.textContent = "";
+        };
         displayText.textContent = newText;
       } else {
         decimalUsed = false;
         displayText.textContent = "0";
+        displayOperator.textContent = "";
       };
+
       if (operatorReady) operatorJustReady = true; // for preventing early equals pressing
 
     } else {
@@ -49,6 +55,7 @@ calculator.addEventListener("click", evt => {
           displayText.textContent = "";
           operatorJustReady = false;
         }
+        if (operator === "=") displayOperator.textContent = "";
         displayText.textContent += evt.target.textContent; 
       };
       
@@ -62,6 +69,7 @@ calculator.addEventListener("click", evt => {
         operator = evt.target.textContent;
         operatorReady = true;
         operatorJustReady = true;
+        displayOperator.textContent = evt.target.textContent;
 
       } else if ((evt.target.textContent === "=" || operators.includes(evt.target.textContent)) && operatorReady && !operatorJustReady && displayText.textContent !== "") {
         if (+displayText.textContent === 0 && operator === "÷") {
@@ -78,6 +86,7 @@ calculator.addEventListener("click", evt => {
             decimalUsed = false;
           };
         };
+        displayOperator.textContent = evt.target.textContent;
       };
     };
   };
