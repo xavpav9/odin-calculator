@@ -33,15 +33,13 @@ calculator.addEventListener("click", evt => {
         operatorReady = false;
         operator = "";
         operatorJustReady = false;
+        displayOperator.textContent = "";
         return;
       }
       if (evt.target.textContent === "DEL") {
         let newText = displayText.textContent.slice(0, -1);
         if (!newText.includes(".")) decimalUsed = false;
-        if (newText === "") {
-          newText += "0";
-          displayOperator.textContent = "";
-        };
+        if (newText === "" || newText === "-") newText = "0";
         if (operator === "=") displayOperator.textContent = "";
         displayText.textContent = newText;
       } else {
