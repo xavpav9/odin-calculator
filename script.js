@@ -63,6 +63,11 @@ calculator.addEventListener("click", evt => {
       };
       
       if (evt.target.textContent === "." && !decimalUsed) {
+        if (operator === "=") {
+          displayOperator.textContent = "";
+          displayText.textContent = "0";
+        };
+        if (operatorJustReady) operatorJustReady = false;
         displayText.textContent += evt.target.textContent;
         decimalUsed = true;
       };
