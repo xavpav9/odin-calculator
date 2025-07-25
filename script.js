@@ -1,4 +1,4 @@
-const ZERO_MESSAGE = "Error";
+const ERROR_MESSAGE = "Error";
 const TOO_LONG = "Too Long";
 const MAX_LENGTH = 7;
 const calculator = document.querySelector(".calculator");
@@ -17,7 +17,7 @@ let operator;
 
 calculator.addEventListener("click", evt => {
   if (evt.target.tagName === "BUTTON") {
-    if (evt.target.textContent === "AC" || displayText.textContent === ZERO_MESSAGE || displayText.textContent === TOO_LONG) {
+    if (evt.target.textContent === "AC" || displayText.textContent === ERROR_MESSAGE || displayText.textContent === TOO_LONG) {
       leftOperand = "";
       operator = "";
       operatorReady = false;
@@ -38,14 +38,17 @@ calculator.addEventListener("click", evt => {
       if (evt.target.textContent === "DEL") {
         let newText = displayText.textContent.slice(0, -1);
         if (newText === "" || newText === "-") newText = "0";
+        if (operatorReady && newText === "0") {
+          newText = leftOperand;
+          operatorReady = false;
+          displayOperator.textContent = "";
+        }
         if (operator === "=") displayOperator.textContent = "";
         displayText.textContent = newText;
       } else {
         displayText.textContent = "0";
         displayOperator.textContent = "";
       };
-
-      if (operatorReady) operatorJustReady = true; // for preventing early equals pressing
 
     } else if (evt.target.textContent === "M") {
       memory = +displayText.textContent;
@@ -93,10 +96,14 @@ calculator.addEventListener("click", evt => {
         else displayOperator.textContent = evt.target.textContent;
 
       } else if ((evt.target.textContent === "=" || operators.includes(evt.target.textContent)) && operatorReady && !operatorJustReady && displayText.textContent !== "") {
-        if (+displayText.textContent === 0 && operator === "÷") {
-          displayText.textContent = ZERO_MESSAGE;
+        if ((+displayText.textContent === 0 && operator === "÷") || (leftOperand < 0 && operator === "y√x" && +displayText.textContent > 1) || (leftOperand < 0 && operator === "xy" && +displayText.textContent < 1 && +displayText.textContent > 0)) {
+          displayText.textContent = ERROR_MESSAGE;
         } else {
           leftOperand = operate(leftOperand, operator, +displayText.textContent);
+          if (leftOperand === NaN) { 
+            displayText.textContent = ERROR_MESSAGE;
+            return;
+            }
           let negative = false;
           if (leftOperand < 0) {
             leftOperand *= -1;
