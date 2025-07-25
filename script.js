@@ -123,6 +123,7 @@ calculator.addEventListener("click", evt => {
               leftOperand = Math.round(leftOperand * (10 ** (right))) / (10 ** (right));
             };
           };
+          if (leftOperand === 10 ** MAX_LENGTH || leftOperand === -(10 ** MAX_LENGTH)) leftOperand = leftOperand.toExponential();
 
           displayText.textContent = ((negative && leftOperand !== TOO_LONG) ? "-" : "") + leftOperand;
 
