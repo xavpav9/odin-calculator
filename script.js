@@ -108,12 +108,12 @@ calculator.addEventListener("click", evt => {
             negative = true;
           };
 
-          if (String(leftOperand).split(".")[0].length > MAX_LENGTH) leftOperand = TOO_LONG;
+          if (String(leftOperand).split("e+")[1] > (MAX_LENGTH - 1) || String(leftOperand).split(".")[0].length > MAX_LENGTH) leftOperand = TOO_LONG;
           else {
-            if (String(leftOperand)[8] === ".") {
+            if (String(leftOperand)[MAX_LENGTH] === ".") {
               leftOperand = Math.round(leftOperand);
-            } else if (String(leftOperand).slice(0, 8).includes(".")) {
-              const right = String(leftOperand).slice(0, 8).split(".")[1].length;
+            } else if (String(leftOperand).slice(0, MAX_LENGTH).includes(".")) {
+              const right = String(leftOperand).slice(0, MAX_LENGTH).split(".")[1].length;
               leftOperand = Math.round(leftOperand * (10 ** (right))) / (10 ** (right));
             };
           };
