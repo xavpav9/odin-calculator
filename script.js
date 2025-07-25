@@ -11,7 +11,6 @@ const numbers = "0 1 2 3 4 5 6 7 8 9".split(" ");
 const operators = "+ - x ÷ xy y√x".split(" ");
 let operatorReady = false;
 let operatorJustReady = false;
-let decimalUsed = false;
 let memory = 0;
 let leftOperand;
 let operator;
@@ -23,7 +22,6 @@ calculator.addEventListener("click", evt => {
       operator = "";
       operatorReady = false;
       operatorJustReady = false;
-      decimalUsed = false;
       displayText.textContent = "0";
       displayOperator.textContent = "";
       if (evt.target.textContent === "AC") return;
@@ -39,12 +37,10 @@ calculator.addEventListener("click", evt => {
       }
       if (evt.target.textContent === "DEL") {
         let newText = displayText.textContent.slice(0, -1);
-        if (!newText.includes(".")) decimalUsed = false;
         if (newText === "" || newText === "-") newText = "0";
         if (operator === "=") displayOperator.textContent = "";
         displayText.textContent = newText;
       } else {
-        decimalUsed = false;
         displayText.textContent = "0";
         displayOperator.textContent = "";
       };
@@ -72,20 +68,19 @@ calculator.addEventListener("click", evt => {
         if (operator === "=") displayOperator.textContent = "";
       };
       
-      if (evt.target.textContent === "." && !decimalUsed) {
+      if (evt.target.textContent === "." && !displayText.textContent.includes(".")){
         if (operator === "=") {
           displayOperator.textContent = "";
           displayText.textContent = "0";
         };
         if (operatorJustReady) operatorJustReady = false;
         displayText.textContent += evt.target.textContent;
-        decimalUsed = true;
       };
       
       if (evt.target.textContent === "+/-") {
         if (operator === "=") displayOperator.textContent = "";
         let newText = -+displayText.textContent; 
-        displayText.textContent = newText;
+        displayText.textContent = newText.toExponential();
       };
 
       if (operators.includes(evt.target.textContent) && !operatorReady) {
@@ -109,11 +104,12 @@ calculator.addEventListener("click", evt => {
           };
           
           const exponentialLeftOperand = leftOperand.toExponential();
-          const eNumber = String(exponentialLeftOperand).split("e+")[0];
-          const ePower = String(exponentialLeftOperand).split("e+")[1];
-          if (ePower > (MAX_LENGTH - 1)) {
-            leftOperand = Math.round(eNumber * (10 ** (MAX_LENGTH - ePower.length - 2 - 2))) / (10 ** (MAX_LENGTH - ePower.length - 2 - 2)); // 2 for the e+, and 2 for the decimal point and before decimal point
-            leftOperand += "e+" + ePower;
+          const eNumber = String(exponentialLeftOperand).includes("e+") ? String(exponentialLeftOperand).split("e+")[0] : String(exponentialLeftOperand).split("e-")[0];
+          const ePower = String(exponentialLeftOperand).split("e+")[1] ?? String(exponentialLeftOperand).split("e-")[1];
+
+          if ((exponentialLeftOperand.includes("e+") && ePower > (MAX_LENGTH - 1)) || (exponentialLeftOperand.includes("e-") && ePower > (MAX_LENGTH - 2))) {
+            leftOperand = Math.round(eNumber * (10 ** (MAX_LENGTH - ePower.length - 2 - 2))) / (10 ** (MAX_LENGTH - ePower.length - 2 - 2)); // 2 for the e+/e-, and 2 for the decimal point and before decimal point
+            leftOperand += (exponentialLeftOperand.includes("e+") ? "e+" : "e-") + ePower;
           } else if (String(leftOperand).split(".")[0].length > MAX_LENGTH || leftOperand === -Infinity || leftOperand === Infinity) leftOperand = TOO_LONG;
           else {
             if (String(leftOperand)[MAX_LENGTH] === ".") {
@@ -132,9 +128,6 @@ calculator.addEventListener("click", evt => {
             operator = "="; // for CE
           } else operator = evt.target.textContent; // for chained operations
           operatorJustReady = true; 
-          if (!displayText.textContent.includes(".")) {
-            decimalUsed = false;
-          };
         };
         if (evt.target.classList.contains("power")) displayOperator.textContent = "^";
         else if (evt.target.classList.contains("root")) displayOperator.textContent = "√";
@@ -170,6 +163,7 @@ const numberToClass = {
 
 window.addEventListener("keydown", evt => {
   if (!evt.ctrlKey && !evt.altKey && !evt.metaKey) { // not shift because it is needed to press + and *
+    evt.preventDefault();
     const keyClass = numberToClass[evt.key];
     if (keyClass !== undefined) document.querySelector(keyClass).dispatchEvent(new Event("click", {bubbles: true}));
   };
