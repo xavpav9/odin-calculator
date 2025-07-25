@@ -8,7 +8,7 @@ const display = document.querySelector(".display");
 
 displayText.textContent = "0";
 const numbers = "0 1 2 3 4 5 6 7 8 9".split(" ");
-const operators = "+ - x ÷".split(" ");
+const operators = "+ - x ÷ xy y√x".split(" ");
 let operatorReady = false;
 let operatorJustReady = false;
 let decimalUsed = false;
@@ -93,7 +93,9 @@ calculator.addEventListener("click", evt => {
         operator = evt.target.textContent;
         operatorReady = true;
         operatorJustReady = true;
-        displayOperator.textContent = evt.target.textContent;
+        if (evt.target.classList.contains("power")) displayOperator.textContent = "^";
+        else if (evt.target.classList.contains("root")) displayOperator.textContent = "√";
+        else displayOperator.textContent = evt.target.textContent;
 
       } else if ((evt.target.textContent === "=" || operators.includes(evt.target.textContent)) && operatorReady && !operatorJustReady && displayText.textContent !== "") {
         if (+displayText.textContent === 0 && operator === "÷") {
@@ -127,7 +129,9 @@ calculator.addEventListener("click", evt => {
             decimalUsed = false;
           };
         };
-        displayOperator.textContent = evt.target.textContent;
+        if (evt.target.classList.contains("power")) displayOperator.textContent = "^";
+        else if (evt.target.classList.contains("root")) displayOperator.textContent = "√";
+        else displayOperator.textContent = evt.target.textContent;
       };
     };
   };
@@ -150,6 +154,7 @@ const numberToClass = {
   "/": ".divide",
   "x": ".times",
   "*": ".times",
+  "^": ".power",
   "=": ".equals",
   "Enter": ".equals",
   "Backspace": ".delete",
@@ -167,6 +172,8 @@ function add(num1, num2) {return num1 + num2};
 function subtract(num1, num2) {return num1 - num2};
 function multiply(num1, num2) {return num1 * num2};
 function divide(num1, num2) {return num1 / num2};
+function power(num1, num2) {return num1 ** num2};
+function root(num1, num2) {return num1 ** (1/num2)};
 
 function operate(leftOperand, operator, rightOperand) {
   switch (operator) {
@@ -184,6 +191,14 @@ function operate(leftOperand, operator, rightOperand) {
 
     case "÷":
       return divide(leftOperand, rightOperand);
+      break;
+
+    case "xy":
+      return power(leftOperand, rightOperand);
+      break;
+
+    case "y√x":
+      return root(leftOperand, rightOperand);
       break;
   };
 };
