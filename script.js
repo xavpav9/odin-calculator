@@ -83,8 +83,13 @@ calculator.addEventListener("click", evt => {
       
       if (evt.target.textContent === "+/-") {
         if (operator === "=") displayOperator.textContent = "";
-        let newText = -+displayText.textContent; 
-        displayText.textContent = newText.toExponential();
+        let newText;
+        if (+displayText.textContent < 0) {
+          newText = displayText.textContent.slice(1);
+        } else {
+          newText = "-" + displayText.textContent;
+        };
+        displayText.textContent = newText;
       };
 
       if (operators.includes(evt.target.textContent) && !operatorReady) {
