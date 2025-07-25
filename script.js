@@ -125,7 +125,7 @@ calculator.addEventListener("click", evt => {
             };
           };
 
-          displayText.textContent = ((negative) ? "-" : "") + leftOperand;
+          displayText.textContent = ((negative && leftOperand !== TOO_LONG) ? "-" : "") + leftOperand;
 
           if (evt.target.textContent === "=") {
             operatorReady = false;
