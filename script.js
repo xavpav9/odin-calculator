@@ -12,6 +12,7 @@ const operators = "+ - x ÷".split(" ");
 let operatorReady = false;
 let operatorJustReady = false;
 let decimalUsed = false;
+let memory = 0;
 let leftOperand;
 let operator;
 
@@ -50,6 +51,12 @@ calculator.addEventListener("click", evt => {
 
       if (operatorReady) operatorJustReady = true; // for preventing early equals pressing
 
+    } else if (evt.target.textContent === "M") {
+      memory = +displayText.textContent;
+    } else if (evt.target.textContent === "MR") {
+      displayText.textContent = memory;
+      if (operatorJustReady) operatorJustReady = false;
+      if (operator === "=") displayOperator.textContent = "";
     } else {
       if (numbers.includes(evt.target.textContent)) {
         if (displayText.textContent === "0") displayText.textContent = "";
