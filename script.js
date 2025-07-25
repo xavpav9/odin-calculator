@@ -107,8 +107,15 @@ calculator.addEventListener("click", evt => {
             leftOperand *= -1;
             negative = true;
           };
-
-          if (String(leftOperand).split("e+")[1] > (MAX_LENGTH - 1) || String(leftOperand).split(".")[0].length > MAX_LENGTH) leftOperand = TOO_LONG;
+          
+          const exponentialLeftOperand = leftOperand.toExponential();
+          console.log(exponentialLeftOperand);
+          const eNumber = String(exponentialLeftOperand).split("e+")[0];
+          const ePower = String(exponentialLeftOperand).split("e+")[1];
+          if (ePower > (MAX_LENGTH - 1)) {
+            leftOperand = Math.round(eNumber * (10 ** (MAX_LENGTH - ePower.length - 2 - 2))) / (10 ** (MAX_LENGTH - ePower.length - 2 - 2)); // 2 for the e+, and 2 for the decimal point and before decimal point
+            leftOperand += "e+" + ePower;
+          } else if (String(leftOperand).split(".")[0].length > MAX_LENGTH) leftOperand = TOO_LONG;
           else {
             if (String(leftOperand)[MAX_LENGTH] === ".") {
               leftOperand = Math.round(leftOperand);
