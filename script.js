@@ -76,6 +76,7 @@ calculator.addEventListener("click", evt => {
           displayOperator.textContent = "";
           displayText.textContent = "0";
         };
+        if (operatorJustReady === true) displayText.textContent = "0";
         if (operatorJustReady) operatorJustReady = false;
         displayText.textContent += evt.target.textContent;
       };
